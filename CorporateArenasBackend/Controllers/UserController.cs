@@ -1,40 +1,45 @@
-﻿using CorporateArenasBackend.Data.Models;
+﻿using System.Threading.Tasks;
+using CorporateArenasBackend.Data.Models;
+using CorporateArenasBackend.Infrastructure;
 using CorporateArenasBackend.Models.User;
-using Microsoft.AspNetCore.Identity;
+using CorporateArenasBackend.Repositories.User;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
     public class UserController : ApiController
     {
-        private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _repository;
 
-        public UserController(UserManager<User> userManager)
-            => _userManager = userManager;
-
-        [Route(nameof(Create))]
-        [HttpPost]
-        public async Task<ActionResult> Create(CreateUserRequestModel model)
+        public UserController(IUserRepository repository)
         {
-            var user = new User
-            {
-                Email = model.Email,
-                UserName = model.UserName
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-                return Ok();
-
-            return BadRequest(result.Errors);
+            _repository = repository;
         }
 
-        [Route(nameof(Test))]
-        public ActionResult Test()
+        [Authorize]
+        [Route(nameof(Create))]
+        [HttpPost]
+        public async Task<ActionResult<User>> Create(CreateUserRequestModel model)
         {
-            return Ok(new { Message = "Test Message" });
+            var user = await _repository.Create(model);
+
+            return user != null
+                ? Created(nameof(Create), user)
+                : StatusCode(StatusCodes.Status500InternalServerError, null);
+        }
+
+        [Authorize]
+        [Route(nameof(Update))]
+        [HttpPost]
+        public async Task<ActionResult<User>> Update(UpdateUserRequestModel model)
+        {
+            var user = await _repository.Update(User.GetId(), model);
+
+            return user != null
+                ? Accepted(nameof(Update), model)
+                : StatusCode(StatusCodes.Status500InternalServerError, null);
         }
     }
 }

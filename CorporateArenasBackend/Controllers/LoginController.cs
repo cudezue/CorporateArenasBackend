@@ -1,59 +1,42 @@
-﻿using CorporateArenasBackend.Data.Models;
+﻿using System.Threading.Tasks;
+using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Models.User;
+using CorporateArenasBackend.Repositories.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
     public class LoginController : ApiController
     {
+        private static readonly object LoginErrorMessage = new {ErrorMessage = "Invalid Email/Password"};
+        private readonly UserRepository _repository;
         private readonly UserManager<User> _userManager;
-        private readonly ApplicationSettings _appSettings;
 
-        public LoginController(UserManager<User> userManager, IOptions<ApplicationSettings> appSettings)
+        public LoginController(UserManager<User> userManager, UserRepository repository)
         {
             _userManager = userManager;
-            _appSettings = appSettings.Value;
+            _repository = repository;
         }
 
         [Route("")]
         [HttpPost]
-        public async Task<ActionResult<object>> Login(LoginRequestModel model)
+        public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
 
             if (user == null)
-                return Unauthorized(new { ErrorMessage = "Invalid Email/Password" });
+                return Unauthorized(LoginErrorMessage);
 
             var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (!passwordValid)
-                return Unauthorized();
+                return Unauthorized(LoginErrorMessage);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            return Ok(new LoginResponseModel
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return Ok(new
-            {
-                Token = tokenHandler.WriteToken(token)
+                Token = _repository.GenerateJWTToken(user),
+                User = user
             });
         }
     }
