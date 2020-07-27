@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CorporateArenasBackend.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CorporateArenasBackend.Controllers
 {
