@@ -39,6 +39,13 @@ namespace CorporateArenasBackend.Repositories.User
             return user;
         }
 
+        public async Task<Data.Models.User> FindByUserName(string userName)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+
+            return user;
+        }
+
         public async Task<Data.Models.User> Create(CreateUserRequestModel model)
         {
             var user = new Data.Models.User
@@ -75,7 +82,7 @@ namespace CorporateArenasBackend.Repositories.User
             await _db.SaveChangesAsync();
         }
 
-        public string GenerateJWTToken(Data.Models.User user)
+        public string GenerateJwtToken(Data.Models.User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);

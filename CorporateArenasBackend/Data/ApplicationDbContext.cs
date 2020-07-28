@@ -13,11 +13,11 @@ namespace CorporateArenasBackend.Data
         }
 
         public DbSet<Permission> Permissions { get; set; }
-        new public DbSet<User> Users { get; set; }
+        public new DbSet<User> Users { get; set; }
 
-        new public DbSet<Role> Roles { get; set; }
+        public new DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
-        new public DbSet<UserRole> UserRoles { get; set; }
+        public new DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,7 +25,7 @@ namespace CorporateArenasBackend.Data
             builder.Entity<RolePermission>().HasKey(rp => new {rp.RoleId, rp.PermissionId});
 
             builder.Entity<User>()
-                .HasOne<UserRole>(ur => ur.Role)
+                .HasOne(ur => ur.Role)
                 .WithOne(u => u.User)
                 .HasForeignKey<UserRole>(fk => fk.UserId);
 

@@ -1,8 +1,8 @@
-﻿using CorporateArenasBackend.Data;
+﻿using System;
+using System.Collections.Generic;
+using CorporateArenasBackend.Data;
 using CorporateArenasBackend.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace CorporateArenasBackend.Infrastructure
 {
@@ -15,14 +15,15 @@ namespace CorporateArenasBackend.Infrastructure
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "Admin",
-                    Description = "Administrator determines the site policies, appoints moderators and manages the technical operations"
+                    Description =
+                        "Administrator determines the site policies, appoints moderators and manages the technical operations"
                 }
-                );
+            );
         }
 
         public static void SeedPermissionTable(this ModelBuilder modelBuilder)
         {
-            var entities = new string[] { "User", "Role", "Permission" };
+            var entities = new[] {"User", "Role", "Permission"};
             var permissions = new List<Permission>();
 
             foreach (var entity in entities)
@@ -35,7 +36,7 @@ namespace CorporateArenasBackend.Infrastructure
                         Description = string.Format("Creates a {0} resource", entity),
                         Entity = entity
                     }
-                    );
+                );
                 permissions.Add(
                     new Permission
                     {
@@ -44,7 +45,7 @@ namespace CorporateArenasBackend.Infrastructure
                         Description = string.Format("Reads a {0} resource", entity),
                         Entity = entity
                     }
-                    );
+                );
                 permissions.Add(
                     new Permission
                     {
@@ -53,7 +54,7 @@ namespace CorporateArenasBackend.Infrastructure
                         Description = string.Format("Updates a {0} resource", entity),
                         Entity = entity
                     }
-                    );
+                );
                 permissions.Add(
                     new Permission
                     {
@@ -62,12 +63,12 @@ namespace CorporateArenasBackend.Infrastructure
                         Description = string.Format("Remove a {0} resource", entity),
                         Entity = entity
                     }
-                    );
+                );
             }
 
             var permissionListToBeSeeded = new List<Permission>();
 
-            for (int i = 0; i < permissions.Count; i++)
+            for (var i = 0; i < permissions.Count; i++)
             {
                 permissions[i].Id = i + 1;
                 permissionListToBeSeeded.Add(permissions[i]);
@@ -83,19 +84,17 @@ namespace CorporateArenasBackend.Infrastructure
             var rolePermissions = new List<RolePermission>();
 
             foreach (var permission in permissions)
-            {
                 rolePermissions.Add(
                     new RolePermission
                     {
                         RoleId = role.Id,
                         PermissionId = permission.Id
                     }
-                    );
-            }
+                );
 
             var rolePermissionListToBeSeeded = new List<RolePermission>();
 
-            for (int i = 0; i < rolePermissions.Count; i++)
+            for (var i = 0; i < rolePermissions.Count; i++)
             {
                 rolePermissions[i].Id = i + 1;
                 rolePermissionListToBeSeeded.Add(rolePermissions[i]);

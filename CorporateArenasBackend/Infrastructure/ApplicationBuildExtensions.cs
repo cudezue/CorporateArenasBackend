@@ -16,6 +16,8 @@ namespace CorporateArenasBackend.Infrastructure
 
             dbContext.Database.Migrate();
             RolePermissionSeeder.Run(dbContext);
+            AdminSeeder.Run(dbContext);
+            UserRoleSeeder.Run(dbContext);
         }
     }
 }

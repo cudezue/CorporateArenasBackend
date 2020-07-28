@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Models.Permission;
 using CorporateArenasBackend.Repositories.Permission;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CorporateArenasBackend.Controllers
 {
+    [Authorize]
     public class PermissionController : ApiController
     {
         private static readonly object PermissionNotFound = new {Message = "Permission not found"};

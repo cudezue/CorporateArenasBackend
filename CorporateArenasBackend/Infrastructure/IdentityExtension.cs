@@ -6,6 +6,8 @@ namespace CorporateArenasBackend.Infrastructure
     public static class IdentityExtension
     {
         public static string GetId(this ClaimsPrincipal user)
-            => user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        {
+            return user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Infrastructure;
 using CorporateArenasBackend.Models.User;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CorporateArenasBackend.Controllers
 {
+    [Authorize]
     public class UserController : ApiController
     {
         private readonly IUserRepository _repository;
@@ -18,7 +20,13 @@ namespace CorporateArenasBackend.Controllers
             _repository = repository;
         }
 
-        [Authorize]
+        [Route("")]
+        [HttpGet]
+        public async Task<ActionResult<ICollection<User>>> Index()
+        {
+            return Ok(await _repository.Get());
+        }
+
         [Route(nameof(Create))]
         [HttpPost]
         public async Task<ActionResult<User>> Create(CreateUserRequestModel model)
