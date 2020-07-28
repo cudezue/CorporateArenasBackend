@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CorporateArenasBackend.Data.Migrations
+namespace CorporateArenasBackend.Migrations
 {
-    public partial class InitialTable : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,8 @@ namespace CorporateArenasBackend.Data.Migrations
                 name: "Permissions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 191, nullable: false),
                     Description = table.Column<string>(nullable: false),
                     Action = table.Column<string>(maxLength: 191, nullable: false),
@@ -92,19 +93,19 @@ namespace CorporateArenasBackend.Data.Migrations
                 name: "RolePermissions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: true),
-                    PermissionId = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(nullable: false),
+                    PermissionId = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
+                    table.PrimaryKey("PK_RolePermissions", x => new { x.RoleId, x.PermissionId });
                     table.ForeignKey(
                         name: "FK_RolePermissions_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,25 +197,49 @@ namespace CorporateArenasBackend.Data.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.PrimaryKey("PK_UserRoles", x => new { x.RoleId, x.UserId });
                     table.ForeignKey(
                         name: "FK_UserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Discriminator", "Name", "NormalizedName", "Description" },
+                values: new object[] { "c482e345-5a9b-41ef-8e2e-82043ad5c761", "536cb00d-39f4-43d2-8c45-c5ebf8425ff4", "Role", "Admin", null, "Administrator determines the site policies, appoints moderators and manages the technical operations" });
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Id", "Action", "Description", "Entity", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Create", "Creates a User resource", "User", "Create user" },
+                    { 2, "Read", "Reads a User resource", "User", "Read user" },
+                    { 3, "Update", "Updates a User resource", "User", "Update user" },
+                    { 4, "Delete", "Remove a User resource", "User", "Delete user" },
+                    { 5, "Create", "Creates a Role resource", "Role", "Create role" },
+                    { 6, "Read", "Reads a Role resource", "Role", "Read role" },
+                    { 7, "Update", "Updates a Role resource", "Role", "Update role" },
+                    { 8, "Delete", "Remove a Role resource", "Role", "Delete role" },
+                    { 9, "Create", "Creates a Permission resource", "Permission", "Create permission" },
+                    { 10, "Read", "Reads a Permission resource", "Permission", "Read permission" },
+                    { 11, "Update", "Updates a Permission resource", "Permission", "Update permission" },
+                    { 12, "Delete", "Remove a Permission resource", "Permission", "Delete permission" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -257,21 +282,10 @@ namespace CorporateArenasBackend.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_RoleId",
-                table: "RolePermissions",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RoleId",
-                table: "UserRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_UserId",
                 table: "UserRoles",
                 column: "UserId",
-                unique: true,
-                filter: "[UserId] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

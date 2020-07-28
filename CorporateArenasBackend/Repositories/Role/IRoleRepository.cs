@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CorporateArenasBackend.Models.Role;
-using Microsoft.AspNetCore.Identity;
 
 namespace CorporateArenasBackend.Repositories.Role
 {
     public interface IRoleRepository
     {
-        Task<ICollection<IdentityRole>> Get();
-        Task<IdentityRole> GetById(string id);
-        Task<IdentityRole> Create(RoleRequestModel model);
-        Task<IdentityRole> Update(string id, RoleRequestModel model);
-        Task Delete(IdentityRole role);
+        Task<ICollection<Data.Models.Role>> Get();
+        Task<Data.Models.Role> GetById(string id);
+        Task<Data.Models.Role> Create(RoleRequestModel model);
+        Task<Data.Models.Role> Update(string id, RoleRequestModel model);
+        Task Delete(Data.Models.Role role);
     }
 }

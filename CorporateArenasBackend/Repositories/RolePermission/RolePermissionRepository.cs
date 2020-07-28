@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CorporateArenasBackend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CorporateArenasBackend.Repositories.RolePermission
 {
@@ -11,8 +13,15 @@ namespace CorporateArenasBackend.Repositories.RolePermission
         {
             _db = db;
         }
+        
+        public async Task<ICollection<Data.Models.RolePermission>> Get()
+        {
+            var roles = await _db.RolePermissions.ToListAsync();
 
-        public async Task<Data.Models.RolePermission> Create(string roleId, string permissionId)
+            return roles;
+        }
+
+        public async Task<Data.Models.RolePermission> Create(string roleId, int permissionId)
         {
             var rolePermission = new Data.Models.RolePermission
             {

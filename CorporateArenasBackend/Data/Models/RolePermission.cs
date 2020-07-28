@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace CorporateArenasBackend.Data.Models
 {
     public class RolePermission
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
+        [Required]
         public string RoleId { get; set; }
 
-        public string PermissionId { get; set; }
+        public int PermissionId { get; set; }
 
         public Role Role { get; set; }
     }

@@ -38,7 +38,7 @@ namespace CorporateArenasBackend.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<ActionResult<Permission>> Update(string id, PermissionRequestModel model)
+        public async Task<ActionResult<Permission>> Update(int id, PermissionRequestModel model)
         {
             var permission = await _repository.GetById(id);
 
@@ -53,7 +53,7 @@ namespace CorporateArenasBackend.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
             var permission = await _repository.GetById(id);
 

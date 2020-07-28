@@ -26,7 +26,7 @@ namespace CorporateArenasBackend.Repositories.UserRole
             return userRole;
         }
 
-        public async Task<Data.Models.UserRole> Update(string id, string roleId, string userId)
+        public async Task<Data.Models.UserRole> Update(int id, string roleId, string userId)
         {
             var userRole = new Data.Models.UserRole
             {

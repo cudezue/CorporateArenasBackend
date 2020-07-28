@@ -22,7 +22,7 @@ namespace CorporateArenasBackend.Repositories.Permission
             return permissions;
         }
 
-        public async Task<Data.Models.Permission> GetById(string id)
+        public async Task<Data.Models.Permission> GetById(int id)
         {
             var permission = await _db.Permissions.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -45,7 +45,7 @@ namespace CorporateArenasBackend.Repositories.Permission
             return permission;
         }
 
-        public async Task<Data.Models.Permission> Update(string id, PermissionRequestModel model)
+        public async Task<Data.Models.Permission> Update(int id, PermissionRequestModel model)
         {
             var permission = new Data.Models.Permission
             {

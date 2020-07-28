@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CorporateArenasBackend.Data.Models;
+﻿using CorporateArenasBackend.Data.Models;
+using CorporateArenasBackend.Infrastructure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,16 +13,21 @@ namespace CorporateArenasBackend.Data
         }
 
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<User> Users { get; set; }
+        new public DbSet<User> Users { get; set; }
+
+        new public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
+        new public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<UserRole>().HasKey(ur => new {ur.RoleId, ur.UserId});
+            builder.Entity<RolePermission>().HasKey(rp => new {rp.RoleId, rp.PermissionId});
+
             builder.Entity<User>()
-                .HasOne(u => u.Role)
-                .WithOne(r => r.User)
-                .HasForeignKey<UserRole>(f => f.UserId);
+                .HasOne<UserRole>(ur => ur.Role)
+                .WithOne(u => u.User)
+                .HasForeignKey<UserRole>(fk => fk.UserId);
 
             builder.Entity<Role>()
                 .HasMany(u => u.Users)
@@ -35,6 +38,9 @@ namespace CorporateArenasBackend.Data
                 .HasMany(p => p.Permissions)
                 .WithOne(r => r.Role)
                 .HasForeignKey(f => f.RoleId);
+
+            builder.SeedRoleTable();
+            builder.SeedPermissionTable();
 
             base.OnModelCreating(builder);
         }

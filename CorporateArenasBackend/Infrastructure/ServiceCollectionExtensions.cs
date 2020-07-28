@@ -6,6 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CorporateArenasBackend.Repositories.Permission;
+using CorporateArenasBackend.Repositories.Role;
+using CorporateArenasBackend.Repositories.RolePermission;
+using CorporateArenasBackend.Repositories.User;
+using CorporateArenasBackend.Repositories.UserRole;
 
 namespace CorporateArenasBackend.Infrastructure
 {
@@ -48,6 +53,17 @@ namespace CorporateArenasBackend.Infrastructure
                     };
                 });
 
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IPermissionRepository, PermissionRepository>()
+                .AddTransient<IRoleRepository, RoleRepository>()
+                .AddTransient<IRolePermissionRepository, RolePermissionRepository>()
+                .AddTransient<IUserRepository, UserRepository>()
+                .AddTransient<IUserRoleRepository, UserRoleRepository>();
+            
             return services;
         }
     }

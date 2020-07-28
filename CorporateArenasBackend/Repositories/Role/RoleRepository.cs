@@ -16,19 +16,19 @@ namespace CorporateArenasBackend.Repositories.Role
             _db = db;
         }
 
-        public async Task<ICollection<IdentityRole>> Get()
+        public async Task<ICollection<Data.Models.Role>> Get()
         {
             var roles = await _db.Roles.ToListAsync();
 
             return roles;
         }
 
-        public async Task<IdentityRole> GetById(string id)
+        public async Task<Data.Models.Role> GetById(string id)
         {
             return await _db.Roles.FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<IdentityRole> Create(RoleRequestModel model)
+        public async Task<Data.Models.Role> Create(RoleRequestModel model)
         {
             var role = new Data.Models.Role
             {
@@ -42,7 +42,7 @@ namespace CorporateArenasBackend.Repositories.Role
             return role;
         }
 
-        public async Task<IdentityRole> Update(string id, RoleRequestModel model)
+        public async Task<Data.Models.Role> Update(string id, RoleRequestModel model)
         {
             var role = new Data.Models.Role
             {
@@ -57,7 +57,7 @@ namespace CorporateArenasBackend.Repositories.Role
             return role;
         }
 
-        public async Task Delete(IdentityRole role)
+        public async Task Delete(Data.Models.Role role)
         {
             _db.Roles.Remove(role);
             await _db.SaveChangesAsync();

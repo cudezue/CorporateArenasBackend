@@ -1,4 +1,5 @@
 ﻿using CorporateArenasBackend.Data;
+using CorporateArenasBackend.Seeders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ namespace CorporateArenasBackend.Infrastructure
             var dbContext = services.ServiceProvider.GetService<ApplicationDbContext>();
 
             dbContext.Database.Migrate();
+            RolePermissionSeeder.Run(dbContext);
         }
     }
 }

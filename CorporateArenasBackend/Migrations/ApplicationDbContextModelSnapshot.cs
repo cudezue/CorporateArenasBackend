@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CorporateArenasBackend.Data.Migrations
+namespace CorporateArenasBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -21,8 +21,10 @@ namespace CorporateArenasBackend.Data.Migrations
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.Permission", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Action")
                         .IsRequired()
@@ -46,44 +48,137 @@ namespace CorporateArenasBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Action = "Create",
+                            Description = "Creates a User resource",
+                            Entity = "User",
+                            Name = "Create user"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Action = "Read",
+                            Description = "Reads a User resource",
+                            Entity = "User",
+                            Name = "Read user"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Action = "Update",
+                            Description = "Updates a User resource",
+                            Entity = "User",
+                            Name = "Update user"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Action = "Delete",
+                            Description = "Remove a User resource",
+                            Entity = "User",
+                            Name = "Delete user"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Action = "Create",
+                            Description = "Creates a Role resource",
+                            Entity = "Role",
+                            Name = "Create role"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Action = "Read",
+                            Description = "Reads a Role resource",
+                            Entity = "Role",
+                            Name = "Read role"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Action = "Update",
+                            Description = "Updates a Role resource",
+                            Entity = "Role",
+                            Name = "Update role"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Action = "Delete",
+                            Description = "Remove a Role resource",
+                            Entity = "Role",
+                            Name = "Delete role"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Action = "Create",
+                            Description = "Creates a Permission resource",
+                            Entity = "Permission",
+                            Name = "Create permission"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Action = "Read",
+                            Description = "Reads a Permission resource",
+                            Entity = "Permission",
+                            Name = "Read permission"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Action = "Update",
+                            Description = "Updates a Permission resource",
+                            Entity = "Permission",
+                            Name = "Update permission"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Action = "Delete",
+                            Description = "Remove a Permission resource",
+                            Entity = "Permission",
+                            Name = "Delete permission"
+                        });
                 });
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.RolePermission", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PermissionId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RoleId");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId");
 
                     b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.UserRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.HasIndex("RoleId");
+                    b.HasKey("RoleId", "UserId");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("UserRoles");
                 });
@@ -304,6 +399,15 @@ namespace CorporateArenasBackend.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c482e345-5a9b-41ef-8e2e-82043ad5c761",
+                            ConcurrencyStamp = "536cb00d-39f4-43d2-8c45-c5ebf8425ff4",
+                            Name = "Admin",
+                            Description = "Administrator determines the site policies, appoints moderators and manages the technical operations"
+                        });
                 });
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.User", b =>
@@ -329,18 +433,24 @@ namespace CorporateArenasBackend.Data.Migrations
                 {
                     b.HasOne("CorporateArenasBackend.Data.Models.Role", "Role")
                         .WithMany("Permissions")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.UserRole", b =>
                 {
                     b.HasOne("CorporateArenasBackend.Data.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CorporateArenasBackend.Data.Models.User", "User")
                         .WithOne("Role")
-                        .HasForeignKey("CorporateArenasBackend.Data.Models.UserRole", "UserId");
+                        .HasForeignKey("CorporateArenasBackend.Data.Models.UserRole", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

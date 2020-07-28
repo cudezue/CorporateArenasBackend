@@ -10,18 +10,18 @@ namespace CorporateArenasBackend.Controllers
     public class LoginController : ApiController
     {
         private static readonly object LoginErrorMessage = new {ErrorMessage = "Invalid Email/Password"};
-        private readonly UserRepository _repository;
+        private readonly IUserRepository _repository;
         private readonly UserManager<User> _userManager;
 
-        public LoginController(UserManager<User> userManager, UserRepository repository)
+        public LoginController(UserManager<User> userManager, IUserRepository repository)
         {
             _userManager = userManager;
             _repository = repository;
         }
 
-        [Route("")]
+        [Route(nameof(Index))]
         [HttpPost]
-        public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
+        public async Task<ActionResult<LoginResponseModel>> Index(LoginRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
 
