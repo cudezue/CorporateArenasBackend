@@ -148,39 +148,48 @@ namespace CorporateArenasBackend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CorporateArenasBackend.Data.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(191)")
+                        .HasMaxLength(191);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Administrator determines the site policies, appoints moderators and manages the technical operations",
+                            Name = "Admin"
+                        });
+                });
+
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.RolePermission", b =>
                 {
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PermissionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("RoleId", "PermissionId");
 
+                    b.HasIndex("PermissionId");
+
                     b.ToTable("RolePermissions");
-                });
-
-            modelBuilder.Entity("CorporateArenasBackend.Data.Models.UserRole", b =>
-                {
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("RoleId", "UserId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -190,10 +199,6 @@ namespace CorporateArenasBackend.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -212,8 +217,6 @@ namespace CorporateArenasBackend.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -391,25 +394,6 @@ namespace CorporateArenasBackend.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CorporateArenasBackend.Data.Models.Role", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c482e345-5a9b-41ef-8e2e-82043ad5c761",
-                            ConcurrencyStamp = "536cb00d-39f4-43d2-8c45-c5ebf8425ff4",
-                            Name = "Admin",
-                            Description = "Administrator determines the site policies, appoints moderators and manages the technical operations"
-                        });
-                });
-
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -426,29 +410,25 @@ namespace CorporateArenasBackend.Migrations
                         .HasColumnType("nvarchar(191)")
                         .HasMaxLength(191);
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("RoleId");
+
                     b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("CorporateArenasBackend.Data.Models.RolePermission", b =>
                 {
+                    b.HasOne("CorporateArenasBackend.Data.Models.Permission", "Permission")
+                        .WithMany("Roles")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CorporateArenasBackend.Data.Models.Role", "Role")
                         .WithMany("Permissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CorporateArenasBackend.Data.Models.UserRole", b =>
-                {
-                    b.HasOne("CorporateArenasBackend.Data.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CorporateArenasBackend.Data.Models.User", "User")
-                        .WithOne("Role")
-                        .HasForeignKey("CorporateArenasBackend.Data.Models.UserRole", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -500,6 +480,15 @@ namespace CorporateArenasBackend.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CorporateArenasBackend.Data.Models.User", b =>
+                {
+                    b.HasOne("CorporateArenasBackend.Data.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

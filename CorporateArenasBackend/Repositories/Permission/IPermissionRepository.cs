@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using CorporateArenasBackend.Models.Permission;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CorporateArenasBackend.Models.Permission;
 
 namespace CorporateArenasBackend.Repositories.Permission
 {
-    public interface IPermissionRepository
+    public interface IPermissionRepository : IBaseRepository
     {
-        Task<ICollection<Data.Models.Permission>> Get();
-        Task<Data.Models.Permission> GetById(int id);
-        Task<Data.Models.Permission> Create(PermissionRequestModel model);
-        Task<Data.Models.Permission> Update(int id, PermissionRequestModel model);
-        Task Delete(Data.Models.Permission permission);
+        Task<ICollection<PermissionDto>> Get();
+
+        Task<PermissionDto> GetById(int id);
+
+        Task<PermissionDto> Create(PermissionRequestModel model);
+
+        Task<PermissionDto> Update(int id, PermissionRequestModel model);
+
+        Task Delete(int id);
     }
 }

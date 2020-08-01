@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using CorporateArenasBackend.Data.Models;
-using CorporateArenasBackend.Infrastructure;
+﻿using CorporateArenasBackend.Infrastructure;
 using CorporateArenasBackend.Models.User;
 using CorporateArenasBackend.Repositories.User;
+using CorporateArenasBackend.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
@@ -22,15 +22,27 @@ namespace CorporateArenasBackend.Controllers
 
         [Route("")]
         [HttpGet]
-        public async Task<ActionResult<ICollection<User>>> Index()
+        public async Task<ActionResult<ICollection<UserDto>>> Index()
         {
+            var hasPermission = !_repository
+                .HasPermission(await _repository.GetById(User.GetId()), Entities.User, Actions.Create);
+
+            if (hasPermission)
+                return Unauthorized(new { Message = "You are not authorized to perform this action" });
+
             return Ok(await _repository.Get());
         }
 
         [Route(nameof(Create))]
         [HttpPost]
-        public async Task<ActionResult<User>> Create(CreateUserRequestModel model)
+        public async Task<ActionResult<UserDto>> Create(CreateUserRequestModel model)
         {
+            var hasPermission = !_repository
+                .HasPermission(await _repository.GetById(User.GetId()), Entities.User, Actions.Create);
+
+            if (hasPermission)
+                return Unauthorized(new { Message = "You are not authorized to perform this action" });
+
             var user = await _repository.Create(model);
 
             return user != null
@@ -38,10 +50,9 @@ namespace CorporateArenasBackend.Controllers
                 : StatusCode(StatusCodes.Status500InternalServerError, null);
         }
 
-        [Authorize]
         [Route(nameof(Update))]
-        [HttpPost]
-        public async Task<ActionResult<User>> Update(UpdateUserRequestModel model)
+        [HttpPatch]
+        public async Task<ActionResult<UserDto>> Update(UpdateUserRequestModel model)
         {
             var user = await _repository.Update(User.GetId(), model);
 

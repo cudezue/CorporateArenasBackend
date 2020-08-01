@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using CorporateArenasBackend.Data;
+﻿using CorporateArenasBackend.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Repositories.RolePermission
 {
-    public class RolePermissionRepository: IRolePermissionRepository
+    public class RolePermissionRepository : IRolePermissionRepository
     {
         private readonly ApplicationDbContext _db;
 
@@ -13,7 +13,7 @@ namespace CorporateArenasBackend.Repositories.RolePermission
         {
             _db = db;
         }
-        
+
         public async Task<ICollection<Data.Models.RolePermission>> Get()
         {
             var roles = await _db.RolePermissions.ToListAsync();
@@ -21,7 +21,7 @@ namespace CorporateArenasBackend.Repositories.RolePermission
             return roles;
         }
 
-        public async Task<Data.Models.RolePermission> Create(string roleId, int permissionId)
+        public async Task<Data.Models.RolePermission> Create(int roleId, int permissionId)
         {
             var rolePermission = new Data.Models.RolePermission
             {

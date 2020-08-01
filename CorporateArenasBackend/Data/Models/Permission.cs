@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CorporateArenasBackend.Data.Models
 {
@@ -13,5 +14,7 @@ namespace CorporateArenasBackend.Data.Models
         [Required] [MaxLength(191)] public string Action { get; set; }
 
         [Required] [MaxLength(191)] public string Entity { get; set; }
+
+        public ICollection<RolePermission> Roles { get; set; }
     }
 }

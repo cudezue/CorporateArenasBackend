@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using CorporateArenasBackend.Models.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CorporateArenasBackend.Models.User;
 
 namespace CorporateArenasBackend.Repositories.User
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository
     {
-        Task<ICollection<Data.Models.User>> Get();
-        Task<Data.Models.User> GetById(string id);
-        Task<Data.Models.User> FindByUserName(string userName);
-        Task<Data.Models.User> Create(CreateUserRequestModel model);
-        Task<Data.Models.User> Update(string id, UpdateUserRequestModel model);
+        Task<ICollection<UserDto>> Get();
+
+        Task<UserDto> GetById(string id);
+
+        Task<UserDto> FindByUserName(string userName);
+
+        Task<UserDto> Create(CreateUserRequestModel model);
+
+        Task<UserDto> Update(string id, UpdateUserRequestModel model);
+
         Task Delete(Data.Models.User user);
-        string GenerateJwtToken(Data.Models.User user);
+
+        string GenerateJwtToken(string userId, string userName);
     }
 }

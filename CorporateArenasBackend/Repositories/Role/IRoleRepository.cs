@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using CorporateArenasBackend.Models.Role;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CorporateArenasBackend.Models.Role;
 
 namespace CorporateArenasBackend.Repositories.Role
 {
-    public interface IRoleRepository
+    public interface IRoleRepository: IBaseRepository
     {
-        Task<ICollection<Data.Models.Role>> Get();
-        Task<Data.Models.Role> GetById(string id);
-        Task<Data.Models.Role> Create(RoleRequestModel model);
-        Task<Data.Models.Role> Update(string id, RoleRequestModel model);
-        Task Delete(Data.Models.Role role);
+        Task<ICollection<RoleDto>> Get();
+
+        Task<RoleDto> GetById(int id);
+
+        Task<RoleDto> Create(RoleRequestModel model);
+
+        Task<RoleDto> Update(int id, RoleRequestModel model);
+
+        Task Delete(int id);
     }
 }

@@ -1,15 +1,14 @@
-﻿using System.Text;
-using CorporateArenasBackend.Data;
+﻿using CorporateArenasBackend.Data;
 using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Repositories.Permission;
 using CorporateArenasBackend.Repositories.Role;
 using CorporateArenasBackend.Repositories.RolePermission;
 using CorporateArenasBackend.Repositories.User;
-using CorporateArenasBackend.Repositories.UserRole;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CorporateArenasBackend.Infrastructure
 {
@@ -61,8 +60,7 @@ namespace CorporateArenasBackend.Infrastructure
             services.AddTransient<IPermissionRepository, PermissionRepository>()
                 .AddTransient<IRoleRepository, RoleRepository>()
                 .AddTransient<IRolePermissionRepository, RolePermissionRepository>()
-                .AddTransient<IUserRepository, UserRepository>()
-                .AddTransient<IUserRoleRepository, UserRoleRepository>();
+                .AddTransient<IUserRepository, UserRepository>();
 
             return services;
         }

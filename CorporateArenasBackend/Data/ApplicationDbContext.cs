@@ -17,27 +17,25 @@ namespace CorporateArenasBackend.Data
 
         public new DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
-        public new DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<UserRole>().HasKey(ur => new {ur.RoleId, ur.UserId});
-            builder.Entity<RolePermission>().HasKey(rp => new {rp.RoleId, rp.PermissionId});
-
-            builder.Entity<User>()
-                .HasOne(ur => ur.Role)
-                .WithOne(u => u.User)
-                .HasForeignKey<UserRole>(fk => fk.UserId);
+            builder.Entity<RolePermission>().HasKey(rolePermission => new { rolePermission.RoleId, rolePermission.PermissionId });
 
             builder.Entity<Role>()
-                .HasMany(u => u.Users)
-                .WithOne(r => r.Role)
-                .HasForeignKey(f => f.RoleId);
+                .HasMany(role => role.Users)
+                .WithOne(user => user.Role)
+                .HasForeignKey(fk => fk.RoleId);
 
-            builder.Entity<Role>()
-                .HasMany(p => p.Permissions)
-                .WithOne(r => r.Role)
-                .HasForeignKey(f => f.RoleId);
+            builder.Entity<RolePermission>()
+                .HasOne(rolePermissions => rolePermissions.Role)
+                .WithMany(role => role.Permissions)
+                .HasForeignKey(fk => fk.RoleId);
+
+            builder.Entity<RolePermission>()
+                .HasOne(rolePermissions => rolePermissions.Permission)
+                .WithMany(permission => permission.Roles)
+                .HasForeignKey(fk => fk.PermissionId);
 
             builder.SeedRoleTable();
             builder.SeedPermissionTable();

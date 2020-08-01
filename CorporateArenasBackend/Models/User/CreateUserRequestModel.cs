@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CorporateArenasBackend.Models.User
 {
@@ -16,7 +12,8 @@ namespace CorporateArenasBackend.Models.User
 
         [Required]
         public string Password { get; set; }
-        
-        [Required] public string Role { get; set; }
+
+        [Required]
+        public int Role { get; set; }
     }
 }

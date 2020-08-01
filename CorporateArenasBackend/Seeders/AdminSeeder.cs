@@ -1,29 +1,27 @@
-﻿using System.Linq;
-using CorporateArenasBackend.Data;
-using CorporateArenasBackend.Data.Models;
+﻿using CorporateArenasBackend.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Seeders
 {
     public static class AdminSeeder
     {
-        public static void Run(ApplicationDbContext context)
+        public static async Task RunAsync(UserManager<User> userManager)
         {
-            if (context.Users.Any()) return;
-            
-            var hasher = new PasswordHasher<User>();
+            if (userManager.Users.Any()) return;
+
             var admin = new User
             {
                 FirstName = "Chukwunwike",
                 LastName = "Udezue",
                 UserName = "wyke42",
                 Email = "cudezue@inspirecoders.com",
-                PasswordHash = hasher.HashPassword(null, "secret123"),
-                PhoneNumber = "+2348038614110"
+                PhoneNumber = "+2348038614110",
+                RoleId = 1
             };
 
-            context.Users.Add(admin);
-            context.SaveChanges();
+            await userManager.CreateAsync(admin, "secret123");
         }
     }
 }

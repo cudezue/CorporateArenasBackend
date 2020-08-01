@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CorporateArenasBackend.Data;
 using System.Linq;
-using CorporateArenasBackend.Data;
 
 namespace CorporateArenasBackend.Seeders
 {
@@ -11,8 +10,8 @@ namespace CorporateArenasBackend.Seeders
             if (context.RolePermissions.Any()) return;
             var role = context.Roles.FirstOrDefault();
             var permissions = context.Permissions.ToList();
-            var rolePermissions = permissions.Select(permission => new Data.Models.RolePermission {RoleId = role?.Id, PermissionId = permission.Id}).ToList();
-                
+            var rolePermissions = permissions.Select(permission => new Data.Models.RolePermission { RoleId = role.Id, PermissionId = permission.Id }).ToList();
+
             context.RolePermissions.AddRange(rolePermissions);
             context.SaveChanges();
         }

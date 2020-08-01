@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace CorporateArenasBackend.Data.Models
 {
@@ -11,6 +11,8 @@ namespace CorporateArenasBackend.Data.Models
 
         [MaxLength(191)] public string OtherName { get; set; }
 
-        public UserRole Role { get; set; }
+        [Required] public int RoleId { get; set; }
+
+        public Role Role { get; set; }
     }
 }

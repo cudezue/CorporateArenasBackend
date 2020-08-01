@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
-using CorporateArenasBackend.Data.Models;
+﻿using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Models.User;
 using CorporateArenasBackend.Repositories.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
     public class LoginController : ApiController
     {
-        private static readonly object LoginErrorMessage = new {Message = "Invalid Username/Password"};
+        private static readonly object LoginErrorMessage = new { Message = "Invalid Username/Password" };
         private readonly IUserRepository _repository;
         private readonly UserManager<User> _userManager;
 
@@ -23,8 +23,7 @@ namespace CorporateArenasBackend.Controllers
         [HttpPost]
         public async Task<ActionResult<LoginResponseModel>> Index(LoginRequestModel model)
         {
-            var user = await _repository.FindByUserName(model.UserName);
-
+            var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
                 return Unauthorized(LoginErrorMessage);
 
@@ -35,8 +34,8 @@ namespace CorporateArenasBackend.Controllers
 
             return Ok(new LoginResponseModel
             {
-                Token = _repository.GenerateJwtToken(user),
-                User = user
+                Token = _repository.GenerateJwtToken(user.Id, user.UserName),
+                User = await _repository.FindByUserName(user.UserName)
             });
         }
     }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using CorporateArenasBackend.Data;
+﻿using CorporateArenasBackend.Data;
 using CorporateArenasBackend.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CorporateArenasBackend.Infrastructure
 {
@@ -13,7 +12,7 @@ namespace CorporateArenasBackend.Infrastructure
             modelBuilder.Entity<Role>().HasData(
                 new Role
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    Id = 1,
                     Name = "Admin",
                     Description =
                         "Administrator determines the site policies, appoints moderators and manages the technical operations"
@@ -23,7 +22,7 @@ namespace CorporateArenasBackend.Infrastructure
 
         public static void SeedPermissionTable(this ModelBuilder modelBuilder)
         {
-            var entities = new[] {"User", "Role", "Permission"};
+            var entities = new[] { "User", "Role", "Permission" };
             var permissions = new List<Permission>();
 
             foreach (var entity in entities)
@@ -84,6 +83,7 @@ namespace CorporateArenasBackend.Infrastructure
             var rolePermissions = new List<RolePermission>();
 
             foreach (var permission in permissions)
+            {
                 rolePermissions.Add(
                     new RolePermission
                     {
@@ -91,12 +91,12 @@ namespace CorporateArenasBackend.Infrastructure
                         PermissionId = permission.Id
                     }
                 );
+            }
 
             var rolePermissionListToBeSeeded = new List<RolePermission>();
 
             for (var i = 0; i < rolePermissions.Count; i++)
             {
-                rolePermissions[i].Id = i + 1;
                 rolePermissionListToBeSeeded.Add(rolePermissions[i]);
             }
 
