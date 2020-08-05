@@ -2,7 +2,6 @@
 using CorporateArenasBackend.Models.User;
 using CorporateArenasBackend.Repositories.User;
 using CorporateArenasBackend.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
-    [Authorize]
     public class UserController : ApiController
     {
         private readonly IUserRepository _repository;

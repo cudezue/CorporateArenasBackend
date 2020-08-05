@@ -3,7 +3,6 @@ using CorporateArenasBackend.Models.Role;
 using CorporateArenasBackend.Repositories.Role;
 using CorporateArenasBackend.Repositories.User;
 using CorporateArenasBackend.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
-    [Authorize]
     public class RoleController : ApiController
     {
         private readonly IRoleRepository _repository;

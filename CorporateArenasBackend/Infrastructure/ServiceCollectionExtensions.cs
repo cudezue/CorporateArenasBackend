@@ -3,6 +3,7 @@ using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Repositories.Permission;
 using CorporateArenasBackend.Repositories.Role;
 using CorporateArenasBackend.Repositories.RolePermission;
+using CorporateArenasBackend.Repositories.TrafficUpdate;
 using CorporateArenasBackend.Repositories.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -60,6 +61,7 @@ namespace CorporateArenasBackend.Infrastructure
             services.AddTransient<IPermissionRepository, PermissionRepository>()
                 .AddTransient<IRoleRepository, RoleRepository>()
                 .AddTransient<IRolePermissionRepository, RolePermissionRepository>()
+                .AddTransient<ITrafficUpdateRepository, TrafficUpdateRepository>()
                 .AddTransient<IUserRepository, UserRepository>();
 
             return services;

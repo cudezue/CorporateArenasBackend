@@ -16,7 +16,12 @@ namespace CorporateArenasBackend.Data
         public new DbSet<User> Users { get; set; }
 
         public new DbSet<Role> Roles { get; set; }
+
         public DbSet<RolePermission> RolePermissions { get; set; }
+
+        public DbSet<TrafficUpdate> TrafficUpdates { get; set; }
+
+        public DbSet<BrainTeaser> BrainTeasers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,6 +41,18 @@ namespace CorporateArenasBackend.Data
                 .HasOne(rolePermissions => rolePermissions.Permission)
                 .WithMany(permission => permission.Roles)
                 .HasForeignKey(fk => fk.PermissionId);
+
+            builder.Entity<TrafficUpdate>()
+                .Property(tu => tu.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+
+            builder.Entity<BrainTeaser>()
+                .Property(tu => tu.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+
+            builder.Entity<TrafficUpdate>()
+                .HasIndex(trafficUpdate => trafficUpdate.Title)
+                .IsUnique();
 
             builder.SeedRoleTable();
             builder.SeedPermissionTable();

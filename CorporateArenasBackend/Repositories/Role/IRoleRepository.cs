@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Repositories.Role
 {
-    public interface IRoleRepository: IBaseRepository
+    public interface IRoleRepository : IBaseRepository
     {
         Task<ICollection<RoleDto>> Get();
 

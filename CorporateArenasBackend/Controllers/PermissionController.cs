@@ -4,7 +4,6 @@ using CorporateArenasBackend.Models.Permission;
 using CorporateArenasBackend.Repositories.Permission;
 using CorporateArenasBackend.Repositories.User;
 using CorporateArenasBackend.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Controllers
 {
-    [Authorize]
     public class PermissionController : ApiController
     {
         private static readonly object PermissionNotFound = new { Message = "Permission not found" };
@@ -30,7 +28,7 @@ namespace CorporateArenasBackend.Controllers
         public async Task<ActionResult<ICollection<PermissionDto>>> Index()
         {
             var hasPermission = !_repository
-                .HasPermission(await _userRepository.GetById(User.GetId()), Entities.Permission, Actions.Read);
+               .HasPermission(await _userRepository.GetById(User.GetId()), Entities.Permission, Actions.Read);
 
             if (hasPermission)
                 return Unauthorized(new { Message = "You are not authorized to perform this action" });

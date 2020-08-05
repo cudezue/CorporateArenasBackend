@@ -1,6 +1,7 @@
 ﻿using CorporateArenasBackend.Data.Models;
 using CorporateArenasBackend.Models.User;
 using CorporateArenasBackend.Repositories.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace CorporateArenasBackend.Controllers
 
         [Route("")]
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<LoginResponseModel>> Index(LoginRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
