@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CorporateArenasBackend.Data.Models
@@ -7,16 +8,16 @@ namespace CorporateArenasBackend.Data.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Title { get; set; }
+        [Required] public string Title { get; set; }
 
-        [Required]
-        public string Body { get; set; }
+        [Required] public string Body { get; set; }
 
         public string Slug { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
         public DateTime? PublishedAt { get; set; }
+
+        public ICollection<TrafficUpdateComment> Comments { get; set; }
     }
 }

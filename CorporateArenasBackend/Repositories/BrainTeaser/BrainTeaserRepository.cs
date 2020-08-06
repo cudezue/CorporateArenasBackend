@@ -1,9 +1,10 @@
-﻿using CorporateArenasBackend.Data;
-using CorporateArenasBackend.Models.BrainTeaser;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CorporateArenasBackend.Data;
+using CorporateArenasBackend.Data.Models;
+using CorporateArenasBackend.Models.BrainTeaser;
+using Microsoft.EntityFrameworkCore;
 
 namespace CorporateArenasBackend.Repositories.BrainTeaser
 {
@@ -29,6 +30,22 @@ namespace CorporateArenasBackend.Repositories.BrainTeaser
             return await GetById(brainTeaser.Id);
         }
 
+        public async Task<BrainTeaserCommentDto> AddComment(int id, BrainTeaserCommentRequest model)
+        {
+            var comment = new BrainTeaserComment
+            {
+                Body = model.Body,
+                Name = model.Name,
+                BrainTeaserId = id
+            };
+
+            _db.BrainTeaserComments.Add(comment);
+            await _db.SaveChangesAsync();
+
+            return new BrainTeaserCommentDto
+                {Body = comment.Body, Id = comment.Id, Name = comment.Body, CreatedAt = comment.CreatedAt};
+        }
+
         public async Task Delete(int id)
         {
             var brainTeaser = await _db.BrainTeasers.FindAsync(id);
@@ -36,21 +53,47 @@ namespace CorporateArenasBackend.Repositories.BrainTeaser
             await _db.SaveChangesAsync();
         }
 
-        public async Task<ICollection<BrainTeaserDto>> Get() => await _db.BrainTeasers
-            .Select(brainTeaser => new BrainTeaserDto
-            {
-                Id = brainTeaser.Id,
-                Riddle = brainTeaser.Riddle,
-                CreatedAt = brainTeaser.CreatedAt
-            }).ToListAsync();
+        public async Task<ICollection<BrainTeaserDto>> Get()
+        {
+            return await _db.BrainTeasers
+                .Include(brainTeaser => brainTeaser.Comments)
+                .Select(brainTeaser => new BrainTeaserDto
+                {
+                    Id = brainTeaser.Id,
+                    Riddle = brainTeaser.Riddle,
+                    CreatedAt = brainTeaser.CreatedAt,
+                    Comments = brainTeaser.Comments
+                        .OrderByDescending(comment => comment.CreatedAt)
+                        .Select(comment => new BrainTeaserCommentDto
+                        {
+                            Id = comment.Id,
+                            Name = comment.Name,
+                            Body = comment.Body,
+                            CreatedAt = comment.CreatedAt
+                        }).ToList()
+                }).ToListAsync();
+        }
 
-        public async Task<BrainTeaserDto> GetById(int id) => await _db.BrainTeasers
-            .Select(brainTeaser => new BrainTeaserDto
-            {
-                Id = brainTeaser.Id,
-                Riddle = brainTeaser.Riddle,
-                CreatedAt = brainTeaser.CreatedAt
-            }).FirstOrDefaultAsync(brainTeaser => brainTeaser.Id == id);
+        public async Task<BrainTeaserDto> GetById(int id)
+        {
+            return await _db.BrainTeasers
+                .Include(brainTeaser => brainTeaser.Comments)
+                .Select(brainTeaser => new BrainTeaserDto
+                {
+                    Id = brainTeaser.Id,
+                    Riddle = brainTeaser.Riddle,
+                    CreatedAt = brainTeaser.CreatedAt,
+                    Comments = brainTeaser.Comments
+                        .OrderByDescending(comment => comment.CreatedAt)
+                        .Select(comment => new BrainTeaserCommentDto
+                        {
+                            Id = comment.Id,
+                            Name = comment.Name,
+                            Body = comment.Body,
+                            CreatedAt = comment.CreatedAt
+                        }).ToList()
+                }).FirstOrDefaultAsync(brainTeaser => brainTeaser.Id == id);
+        }
 
         public async Task<BrainTeaserDto> Update(int id, BrainTeaserRequest model)
         {

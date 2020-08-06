@@ -1,12 +1,10 @@
-﻿using CorporateArenasBackend.Models.BrainTeaser;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CorporateArenasBackend.Models.BrainTeaser;
 
 namespace CorporateArenasBackend.Repositories.BrainTeaser
 {
-    interface IBrainTeaserRepository
+    public interface IBrainTeaserRepository
     {
         Task<ICollection<BrainTeaserDto>> Get();
 
@@ -15,6 +13,8 @@ namespace CorporateArenasBackend.Repositories.BrainTeaser
         Task<BrainTeaserDto> Create(BrainTeaserRequest model);
 
         Task<BrainTeaserDto> Update(int id, BrainTeaserRequest model);
+
+        Task<BrainTeaserCommentDto> AddComment(int id, BrainTeaserCommentRequest model);
 
         Task Delete(int id);
     }

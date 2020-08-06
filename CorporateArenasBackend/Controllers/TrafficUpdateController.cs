@@ -64,6 +64,22 @@ namespace CorporateArenasBackend.Controllers
                 ? Accepted(nameof(Update), result)
                 : StatusCode(StatusCodes.Status500InternalServerError, null);
         }
+        
+        [HttpPost]
+        [Route("{id}/comment")]
+        [AllowAnonymous]
+        public async Task<ActionResult<TrafficUpdateCommentDto>> AddComment(int id, TrafficUpdateCommentRequest model)
+        {
+            var brainTeaser = await _repository.GetById(id);
+
+            if (brainTeaser == null) return NotFound(_trafficUpdateNotFound);
+
+            var result = await _repository.AddComment(id, model);
+
+            return result != null
+                ? Created(nameof(AddComment), result)
+                : StatusCode(StatusCodes.Status500InternalServerError, null);
+        }
 
         [HttpDelete]
         [Route("{id}")]

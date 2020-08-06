@@ -1,6 +1,6 @@
-﻿using CorporateArenasBackend.Models.TrafficUpdate;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CorporateArenasBackend.Models.TrafficUpdate;
 
 namespace CorporateArenasBackend.Repositories.TrafficUpdate
 {
@@ -17,6 +17,8 @@ namespace CorporateArenasBackend.Repositories.TrafficUpdate
         Task<TrafficUpdateDto> Create(TrafficUpdateRequest model);
 
         Task<TrafficUpdateDto> Update(int id, TrafficUpdateRequest model);
+
+        Task<TrafficUpdateCommentDto> AddComment(int id, TrafficUpdateCommentRequest model);
 
         Task Delete(int id);
     }

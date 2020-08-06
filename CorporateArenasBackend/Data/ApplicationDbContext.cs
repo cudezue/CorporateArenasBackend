@@ -23,9 +23,30 @@ namespace CorporateArenasBackend.Data
 
         public DbSet<BrainTeaser> BrainTeasers { get; set; }
 
+        public DbSet<BrainTeaserComment> BrainTeaserComments { get; set; }
+
+        public DbSet<TrafficUpdateComment> TrafficUpdateComments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<RolePermission>().HasKey(rolePermission => new { rolePermission.RoleId, rolePermission.PermissionId });
+            builder.Entity<RolePermission>()
+                .HasKey(rolePermission => new {rolePermission.RoleId, rolePermission.PermissionId});
+
+            builder.Entity<TrafficUpdate>()
+                .Property(tu => tu.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+
+            builder.Entity<BrainTeaser>()
+                .Property(tu => tu.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+            
+            builder.Entity<BrainTeaserComment>()
+                .Property(brainTeaserComment => brainTeaserComment.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+            
+            builder.Entity<TrafficUpdateComment>()
+                .Property(trafficUpdateComment => trafficUpdateComment.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
 
             builder.Entity<Role>()
                 .HasMany(role => role.Users)
@@ -42,13 +63,15 @@ namespace CorporateArenasBackend.Data
                 .WithMany(permission => permission.Roles)
                 .HasForeignKey(fk => fk.PermissionId);
 
-            builder.Entity<TrafficUpdate>()
-                .Property(tu => tu.CreatedAt)
-                .HasDefaultValueSql("getutcdate()");
-
             builder.Entity<BrainTeaser>()
-                .Property(tu => tu.CreatedAt)
-                .HasDefaultValueSql("getutcdate()");
+                .HasMany(brainTeaser => brainTeaser.Comments)
+                .WithOne(comment => comment.BrainTeaser)
+                .HasForeignKey(comment => comment.BrainTeaserId);
+
+            builder.Entity<TrafficUpdate>()
+                .HasMany(trafficUpdate => trafficUpdate.Comments)
+                .WithOne(comment => comment.TrafficUpdate)
+                .HasForeignKey(comment => comment.TrafficUpdateId);
 
             builder.Entity<TrafficUpdate>()
                 .HasIndex(trafficUpdate => trafficUpdate.Title)
