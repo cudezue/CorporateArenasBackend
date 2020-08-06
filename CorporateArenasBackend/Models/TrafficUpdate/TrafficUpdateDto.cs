@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CorporateArenasBackend.Models.TrafficUpdate
 {
@@ -15,5 +16,7 @@ namespace CorporateArenasBackend.Models.TrafficUpdate
         public DateTime CreatedAt { get; set; }
 
         public DateTime? PublishedAt { get; set; }
+
+        public ICollection<TrafficUpdateCommentDto> Comments { get; set; }
     }
 }

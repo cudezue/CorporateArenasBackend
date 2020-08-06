@@ -27,6 +27,10 @@ namespace CorporateArenasBackend.Data
 
         public DbSet<TrafficUpdateComment> TrafficUpdateComments { get; set; }
 
+        public DbSet<Article> Articles { get; set; }
+
+        public DbSet<ArticleComment> ArticleComments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<RolePermission>()
@@ -46,6 +50,10 @@ namespace CorporateArenasBackend.Data
             
             builder.Entity<TrafficUpdateComment>()
                 .Property(trafficUpdateComment => trafficUpdateComment.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+            
+            builder.Entity<Article>()
+                .Property(article => article.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
 
             builder.Entity<Role>()
@@ -75,6 +83,15 @@ namespace CorporateArenasBackend.Data
 
             builder.Entity<TrafficUpdate>()
                 .HasIndex(trafficUpdate => trafficUpdate.Title)
+                .IsUnique();
+            
+            builder.Entity<Article>()
+                .HasMany(article => article.Comments)
+                .WithOne(comment => comment.Article)
+                .HasForeignKey(comment => comment.ArticleId);
+
+            builder.Entity<Article>()
+                .HasIndex(article => article.Title)
                 .IsUnique();
 
             builder.SeedRoleTable();

@@ -8,7 +8,8 @@ namespace CorporateArenasBackend.Repositories
     {
         public virtual bool HasPermission(UserDto user, Entities entity, Actions action)
         {
-            var canPerformAction = user.Role.Permissions.Where(p => p.Entity == entity.ToString() && p.Action == action.ToString()).FirstOrDefault();
+            var canPerformAction = user.Role.Permissions
+                .FirstOrDefault(p => p.Entity == entity.ToString() && p.Action == action.ToString());
             return canPerformAction != null;
         }
     }

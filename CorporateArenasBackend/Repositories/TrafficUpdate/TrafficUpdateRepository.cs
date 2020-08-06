@@ -72,7 +72,15 @@ namespace CorporateArenasBackend.Repositories.TrafficUpdate
                     Title = trafficUpdate.Title,
                     Slug = trafficUpdate.Slug,
                     CreatedAt = trafficUpdate.CreatedAt,
-                    PublishedAt = trafficUpdate.PublishedAt
+                    PublishedAt = trafficUpdate.PublishedAt,
+                    Comments = trafficUpdate.Comments.OrderByDescending(comment => comment.CreatedAt).Select(comment =>
+                        new TrafficUpdateCommentDto
+                        {
+                            Body = comment.Body,
+                            Id = comment.Id,
+                            Name = comment.Name,
+                            CreatedAt = comment.CreatedAt
+                        }).ToList()
                 }).ToListAsync();
         }
 
@@ -86,7 +94,17 @@ namespace CorporateArenasBackend.Repositories.TrafficUpdate
                     Title = trafficUpdate.Title,
                     Slug = trafficUpdate.Slug,
                     CreatedAt = trafficUpdate.CreatedAt,
-                    PublishedAt = trafficUpdate.PublishedAt
+                    PublishedAt = trafficUpdate.PublishedAt,
+                    Comments = trafficUpdate.Comments
+                        .OrderByDescending(comment => comment.CreatedAt)
+                        .Select(comment =>
+                        new TrafficUpdateCommentDto
+                        {
+                            Body = comment.Body,
+                            Id = comment.Id,
+                            Name = comment.Name,
+                            CreatedAt = comment.CreatedAt
+                        }).ToList()
                 })
                 .FirstOrDefaultAsync(trafficUpdate => trafficUpdate.Id == id);
         }
@@ -117,7 +135,17 @@ namespace CorporateArenasBackend.Repositories.TrafficUpdate
                     Title = trafficUpdate.Title,
                     Slug = trafficUpdate.Slug,
                     CreatedAt = trafficUpdate.CreatedAt,
-                    PublishedAt = trafficUpdate.PublishedAt
+                    PublishedAt = trafficUpdate.PublishedAt,
+                    Comments = trafficUpdate.Comments
+                        .OrderByDescending(comment => comment.CreatedAt)
+                        .Select(comment =>
+                            new TrafficUpdateCommentDto
+                            {
+                                Body = comment.Body,
+                                Id = comment.Id,
+                                Name = comment.Name,
+                                CreatedAt = comment.CreatedAt
+                            }).ToList()
                 }).ToListAsync();
         }
 
@@ -131,7 +159,17 @@ namespace CorporateArenasBackend.Repositories.TrafficUpdate
                     Title = trafficUpdate.Title,
                     Slug = trafficUpdate.Slug,
                     CreatedAt = trafficUpdate.CreatedAt,
-                    PublishedAt = trafficUpdate.PublishedAt
+                    PublishedAt = trafficUpdate.PublishedAt,
+                    Comments = trafficUpdate.Comments
+                        .OrderByDescending(comment => comment.CreatedAt)
+                        .Select(comment =>
+                            new TrafficUpdateCommentDto
+                            {
+                                Body = comment.Body,
+                                Id = comment.Id,
+                                Name = comment.Name,
+                                CreatedAt = comment.CreatedAt
+                            }).ToList()
                 })
                 .FirstOrDefaultAsync(trafficUpdate => trafficUpdate.Slug == slug);
         }
