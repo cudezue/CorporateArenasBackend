@@ -101,6 +101,8 @@ namespace CorporateArenasBackend.Repositories.BrainTeaser
 
             brainTeaser.Riddle = model.Riddle;
 
+            _db.BrainTeasers.Update(brainTeaser);
+
             await _db.SaveChangesAsync();
 
             return await GetById(brainTeaser.Id);

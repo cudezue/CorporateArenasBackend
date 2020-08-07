@@ -31,27 +31,37 @@ namespace CorporateArenasBackend.Data
 
         public DbSet<ArticleComment> ArticleComments { get; set; }
 
+        public DbSet<Vacancy> Vacancies { get; set; }
+
+        public DbSet<JobCategory> JobCategories { get; set; }
+
+        public DbSet<JobType> JobTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<RolePermission>()
                 .HasKey(rolePermission => new {rolePermission.RoleId, rolePermission.PermissionId});
 
             builder.Entity<TrafficUpdate>()
-                .Property(tu => tu.CreatedAt)
+                .Property(trafficUpdate => trafficUpdate.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
 
-            builder.Entity<BrainTeaser>()
-                .Property(tu => tu.CreatedAt)
+            builder.Entity<Vacancy>()
+                .Property(vacancy => vacancy.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
             
+            builder.Entity<BrainTeaser>()
+                .Property(brainTeaser => brainTeaser.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+
             builder.Entity<BrainTeaserComment>()
                 .Property(brainTeaserComment => brainTeaserComment.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
-            
+
             builder.Entity<TrafficUpdateComment>()
                 .Property(trafficUpdateComment => trafficUpdateComment.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
-            
+
             builder.Entity<Article>()
                 .Property(article => article.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
@@ -59,17 +69,17 @@ namespace CorporateArenasBackend.Data
             builder.Entity<Role>()
                 .HasMany(role => role.Users)
                 .WithOne(user => user.Role)
-                .HasForeignKey(fk => fk.RoleId);
+                .HasForeignKey(user => user.RoleId);
 
             builder.Entity<RolePermission>()
                 .HasOne(rolePermissions => rolePermissions.Role)
                 .WithMany(role => role.Permissions)
-                .HasForeignKey(fk => fk.RoleId);
+                .HasForeignKey(rolePermission => rolePermission.RoleId);
 
             builder.Entity<RolePermission>()
                 .HasOne(rolePermissions => rolePermissions.Permission)
                 .WithMany(permission => permission.Roles)
-                .HasForeignKey(fk => fk.PermissionId);
+                .HasForeignKey(rolePermission => rolePermission.PermissionId);
 
             builder.Entity<BrainTeaser>()
                 .HasMany(brainTeaser => brainTeaser.Comments)
@@ -84,15 +94,26 @@ namespace CorporateArenasBackend.Data
             builder.Entity<TrafficUpdate>()
                 .HasIndex(trafficUpdate => trafficUpdate.Title)
                 .IsUnique();
-            
+
             builder.Entity<Article>()
                 .HasMany(article => article.Comments)
                 .WithOne(comment => comment.Article)
                 .HasForeignKey(comment => comment.ArticleId);
+            
+            builder.Entity<JobCategory>()
+                .HasMany(jobCategory => jobCategory.Vacancies)
+                .WithOne(vacancy => vacancy.JobCategory)
+                .HasForeignKey(vacancy => vacancy.JobCategoryId);
+            
+            builder.Entity<JobType>()
+                .HasMany(jobType => jobType.Vacancies)
+                .WithOne(vacancy => vacancy.JobType)
+                .HasForeignKey(vacancy => vacancy.JobTypeId);
 
             builder.Entity<Article>()
                 .HasIndex(article => article.Title)
                 .IsUnique();
+            
 
             builder.SeedRoleTable();
             builder.SeedPermissionTable();

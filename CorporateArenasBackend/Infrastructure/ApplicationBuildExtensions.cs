@@ -5,13 +5,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace CorporateArenasBackend.Infrastructure
 {
     public static class ApplicationBuildExtensions
     {
-        public static async Task ApplyMigrations(this IApplicationBuilder app)
+        public static void ApplyMigrations(this IApplicationBuilder app)
         {
             using var services = app.ApplicationServices.CreateScope();
 
@@ -20,7 +19,9 @@ namespace CorporateArenasBackend.Infrastructure
 
             dbContext.Database.Migrate();
             RolePermissionSeeder.Run(dbContext);
-            await AdminSeeder.RunAsync(userManager);
+            AdminSeeder.RunAsync(userManager).GetAwaiter().GetResult();
+            JobTypeSeeder.Run(dbContext);
+            JobCategorySeeder.Run(dbContext);
         }
     }
 }

@@ -95,9 +95,9 @@ namespace CorporateArenasBackend.Infrastructure
 
             var rolePermissionListToBeSeeded = new List<RolePermission>();
 
-            for (var i = 0; i < rolePermissions.Count; i++)
+            foreach (var t in rolePermissions)
             {
-                rolePermissionListToBeSeeded.Add(rolePermissions[i]);
+                rolePermissionListToBeSeeded.Add(t);
             }
 
             modelBuilder.Entity<RolePermission>().HasData(rolePermissionListToBeSeeded);

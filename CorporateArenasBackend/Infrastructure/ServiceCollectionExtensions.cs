@@ -1,15 +1,18 @@
-﻿using CorporateArenasBackend.Data;
+﻿using System.Text;
+using CorporateArenasBackend.Data;
 using CorporateArenasBackend.Data.Models;
+using CorporateArenasBackend.Repositories.Article;
+using CorporateArenasBackend.Repositories.BrainTeaser;
 using CorporateArenasBackend.Repositories.Permission;
 using CorporateArenasBackend.Repositories.Role;
 using CorporateArenasBackend.Repositories.RolePermission;
 using CorporateArenasBackend.Repositories.TrafficUpdate;
 using CorporateArenasBackend.Repositories.User;
+using CorporateArenasBackend.Repositories.Vacancy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace CorporateArenasBackend.Infrastructure
 {
@@ -58,11 +61,16 @@ namespace CorporateArenasBackend.Infrastructure
 
         public static IServiceCollection AddApplicationRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IPermissionRepository, PermissionRepository>()
+            services
+                .AddTransient<IArticleRepository, ArticleRepository>()
+                .AddTransient<IBrainTeaserRepository, BrainTeaserRepository>()
+                .AddTransient<IPermissionRepository, PermissionRepository>()
                 .AddTransient<IRoleRepository, RoleRepository>()
                 .AddTransient<IRolePermissionRepository, RolePermissionRepository>()
                 .AddTransient<ITrafficUpdateRepository, TrafficUpdateRepository>()
-                .AddTransient<IUserRepository, UserRepository>();
+                .AddTransient<IUserRepository, UserRepository>()
+                .AddTransient<IVacancyRepository, VacancyRepository>()
+                .AddTransient<IJobCategoryRepository, JobCategoryRepository>();
 
             return services;
         }
