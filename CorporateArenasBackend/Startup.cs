@@ -34,6 +34,7 @@ namespace CorporateArenasBackend
 
             app.UseRouting()
                 .UseCors(options => options
+                .WithOrigins("*")
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod())

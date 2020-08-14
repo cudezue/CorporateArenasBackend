@@ -15,6 +15,7 @@ namespace CorporateArenasBackend.Seeders
             {
                 new JobCategory
                 {
+                    //Id = 1,
                     Description =
                         "Information and Communications Technology (ICT) refers to all the technology used to handle telecommunications, broadcast media, intelligent building management systems, audiovisual processing and transmission systems, and network-based control and monitoring functions",
                     Name = "Information and Communications Technology"
@@ -22,6 +23,7 @@ namespace CorporateArenasBackend.Seeders
                 
                 new JobCategory
                 {
+                    //Id = 2,
                     Description = "Project management is the process of leading the work of a team to achieve goals and meet success criteria at a specified time",
                     Name = "Project Management"
                 }

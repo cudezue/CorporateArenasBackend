@@ -62,6 +62,10 @@ namespace CorporateArenasBackend.Data
                 .Property(trafficUpdateComment => trafficUpdateComment.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");
 
+            builder.Entity<ArticleComment>()
+                .Property(articleComment => articleComment.CreatedAt)
+                .HasDefaultValueSql("getutcdate()");
+
             builder.Entity<Article>()
                 .Property(article => article.CreatedAt)
                 .HasDefaultValueSql("getutcdate()");

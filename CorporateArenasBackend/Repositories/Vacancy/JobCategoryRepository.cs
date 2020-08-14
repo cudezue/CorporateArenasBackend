@@ -23,6 +23,7 @@ namespace CorporateArenasBackend.Repositories.Vacancy
                 .Include(jobCategory => jobCategory.Vacancies)
                 .Select(jobCategory => new JobCategoryDto
                 {
+                    Id = jobCategory.Id,
                     Description = jobCategory.Description,
                     Name = jobCategory.Name,
                     Vacancies = jobCategory.Vacancies
@@ -47,6 +48,7 @@ namespace CorporateArenasBackend.Repositories.Vacancy
                 .OrderByDescending(jobCategory => jobCategory.Name)
                 .Select(jobCategory => new JobCategoryDto
                 {
+                    Id = jobCategory.Id,
                     Description = jobCategory.Description,
                     Name = jobCategory.Name,
                     Vacancies = jobCategory.Vacancies

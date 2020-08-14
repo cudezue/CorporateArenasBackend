@@ -70,7 +70,8 @@ namespace CorporateArenasBackend.Infrastructure
                 .AddTransient<ITrafficUpdateRepository, TrafficUpdateRepository>()
                 .AddTransient<IUserRepository, UserRepository>()
                 .AddTransient<IVacancyRepository, VacancyRepository>()
-                .AddTransient<IJobCategoryRepository, JobCategoryRepository>();
+                .AddTransient<IJobCategoryRepository, JobCategoryRepository>()
+                .AddTransient<IJobTypeRepository, JobTypeRepository>();
 
             return services;
         }

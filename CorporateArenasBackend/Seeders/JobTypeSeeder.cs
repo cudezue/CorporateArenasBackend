@@ -12,10 +12,10 @@ namespace CorporateArenasBackend.Seeders
             if (context.JobTypes.Any()) return;
             var jobTypes = new List<JobType>
             {
-                new JobType {Name = "Full Time Jobs"},
-                new JobType {Name = "Part Time Jobs"},
-                new JobType {Name = "Remote Jobs"},
-                new JobType {Name = "Freelance Gigs"},
+                new JobType {/*Id = 1,*/ Name = "Full Time Jobs"},
+                new JobType {/*Id = 2,*/ Name = "Part Time Jobs"},
+                new JobType {/*Id = 3,*/ Name = "Remote Jobs"},
+                new JobType {/*Id = 4,*/ Name = "Freelance Gigs"},
             };
             
             context.JobTypes.AddRange(jobTypes);

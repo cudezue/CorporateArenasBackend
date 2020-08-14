@@ -29,6 +29,7 @@ namespace CorporateArenasBackend.Repositories.Vacancy
                     Id = vacancy.Id,
                     Location = vacancy.Location,
                     Title = vacancy.Title,
+                    CreatedAt = vacancy.CreatedAt,
                     JobCategory = new JobCategoryDto
                     {
                         Id = vacancy.JobCategory.Id, Description = vacancy.JobCategory.Description,
@@ -50,6 +51,7 @@ namespace CorporateArenasBackend.Repositories.Vacancy
                     Id = vacancy.Id,
                     Location = vacancy.Location,
                     Title = vacancy.Title,
+                    CreatedAt = vacancy.CreatedAt,
                     JobCategory = new JobCategoryDto
                     {
                         Id = vacancy.JobCategory.Id, Description = vacancy.JobCategory.Description,
